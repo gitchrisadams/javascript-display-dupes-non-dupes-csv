@@ -5,11 +5,20 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.handleFileChosen = this.handleFileChosen.bind(this);
+    this.filterTempArray = this.filterTempArray.bind(this);
 
     this.state = {
       csvFile: ""
     }
   }
+
+  filterTempArray(emailAll, tempRow) {
+    let tempArray = emailAll.filter((count) => {
+      return count.email === tempRow;
+    });
+
+    return tempArray;
+  } 
 
   /*
    * Reads in the csv file for processing
@@ -43,9 +52,7 @@ class App extends Component {
           }
         );
 
-        let tempArray = emailAll.filter((count) => {
-          return count.email === tempRow[4];
-        });
+        let tempArray = this.filterTempArray(emailAll, tempRow[4]);
 
         if (tempArray.length > 1) {
           dupeArray.push(tempArray);
@@ -53,11 +60,10 @@ class App extends Component {
           nonDupeArray.push(tempArray);
         }
       }
-
-
-      //console.log('emailAll', emailAll);
-      console.log('dupeArray', JSON.stringify(dupeArray));
-      console.log('nonDupeArray', JSON.stringify(nonDupeArray));
+      console.log('dupeArray', dupeArray);
+      console.log('nonDupeArray', nonDupeArray);
+      console.log('dupeArray JSON:', JSON.stringify(dupeArray));
+      console.log('nonDupeArray JSON:', JSON.stringify(nonDupeArray));
 
       this.setState({
         dupes: JSON.stringify(dupeArray),
