@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import Button from 'react-bootstrap/Button';
 
 // Library allows testing if words are similar.
 var doubleMetaphone = require('double-metaphone');
@@ -87,6 +88,7 @@ class App extends Component {
       <div className="App">
       <form method="post">
         <input 
+          className="btn"
           id="csvinput" 
           type="file" 
           accept=".csv" 
@@ -94,7 +96,6 @@ class App extends Component {
           onChange={e => this.handleFileChosen(e.target.files[0])}
         >
         </input>
-        <button>Submit</button>
       </form>
 
       <h1>Duplicates</h1>
