@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 
+// Library allows testing if words are similar.
+var doubleMetaphone = require('double-metaphone');
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -12,13 +15,25 @@ class App extends Component {
     }
   }
 
+  /*
+   * This uses the fact that email would be unique for each user.
+   * It further checks if email could be a dupliate
+   * by using doubleMetaphone for similar email addresses.
+   * This could be further expanded to check other user properties.
+   */
   filterTempArray(emailAll, tempRow) {
-    let tempArray = emailAll.filter((count) => {
-      return count.email === tempRow;
+    let tempArray = emailAll.filter((email) => {
+      let tempRowMet = doubleMetaphone(tempRow);
+      let emailMet = doubleMetaphone(email.email);
+
+      return (
+        (email.email === tempRow) && (tempRowMet[0] === emailMet[0] || tempRowMet[1] === emailMet[1])
+      );
     });
 
     return tempArray;
-  } 
+  }
+
 
   /*
    * Reads in the csv file for processing
@@ -29,11 +44,6 @@ class App extends Component {
       let text = fileReader.result;
 
       var textCommaSplit = text.split('\n');
-      //console.log('textCommaSplit', textCommaSplit);
-
-      // Stor the headings:
-      let dataHeading = textCommaSplit[0];
-      console.log('**************************dataHeading****************', dataHeading);
 
       let emailAll = [];
       let dupeArray = [];
@@ -60,8 +70,7 @@ class App extends Component {
           nonDupeArray.push(tempArray);
         }
       }
-      console.log('dupeArray', dupeArray);
-      console.log('nonDupeArray', nonDupeArray);
+
       console.log('dupeArray JSON:', JSON.stringify(dupeArray));
       console.log('nonDupeArray JSON:', JSON.stringify(nonDupeArray));
 
